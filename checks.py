@@ -4,7 +4,7 @@ with open('daylogs.txt',mode='r') as logs:
     levent = logs.readline()
 pass
 
-timedate = datetime.now().strftime(" [%Y-%m-%d %H:%M:%S]")
+timedate = "[" + datetime.datetime.utcnow().replace(microsecond=0).isoformat() + "Z]"
 
 
 def dialog():
