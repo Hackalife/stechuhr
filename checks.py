@@ -1,42 +1,32 @@
-from datetime import datetime
+#!/usr/bin/python3
+import datetime
 
-with open('daylogs.txt',mode='r') as logs:
-    levent = logs.readline()
-pass
+nameOfLogFile = "daylogs.txt"
+utcTime = True
+timeFormat = ""
+shortcuts = {
+  "j": "joylent gegessen",
+}
 
-timedate = "[" + datetime.datetime.utcnow().replace(microsecond=0).isoformat() + "Z]"
-
-
-def dialog():
-    print("Log your events \n","last event: \n")
-    print(levent)
-pass
-
-def addevent():
-
-    with open('daylogs.txt') as logdata:
-        data = logdata.read()
-
-
-    logfile = open("daylogs.txt","w")
-    finlog = ("%s %s")%(timedate, name)
-    logfile.write(str(finlog))
-    logfile.write('\n')
-    logfile.write(data)
-    logfile.close()
-
-pass
-
-dialog()
-
-name = input("eventname ?")
-
-
-if name =="j":
-    name ="joylent gegessen"
-    pass
-
-
-
-
-addevent()
+try:
+  with open ( nameOfLogFile, mode="a+" ) as logFile:
+    logFile.seek ( 0 )
+    oldLogs = logFile.readlines()
+    print ( "Log your events")
+    if oldLogs:
+      print ( " last event:\n", oldLogs [ -1 ])
+    newEntry = input("add new event: ")
+    newEntry = shortcuts.get ( newEntry, newEntry )
+    print( "event: »%s«" % newEntry )
+    if newEntry:
+      if utcTime:
+        theTime = datetime.datetime.utcnow()
+      else:
+        theTime = datetime.datetime.now()
+      if timeFormat:
+        timeStamp = theTime.strftime ( timeFormat )
+      else:
+        timeStamp = "%sZ" % theTime.replace ( microsecond = 0 ).isoformat()
+      logFile.write ( ( "[%s] %s\n" ) % ( timeStamp, newEntry ) )
+except:
+  print ( "Cannot open %s" % nameOfLogFile )
