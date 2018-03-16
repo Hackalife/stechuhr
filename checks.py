@@ -3,7 +3,7 @@ import datetime
 
 nameOfLogFile = "daylogs.txt"
 utcTime = True
-timeFormat = ""
+timeFormat = "%Y-%M-%D %h:%m:%sZ%z"
 shortcuts = {
   "j": "joylent gegessen",
 }
@@ -23,10 +23,10 @@ try:
         theTime = datetime.datetime.utcnow()
       else:
         theTime = datetime.datetime.now()
-      if timeFormat:
-        timeStamp = theTime.strftime ( timeFormat )
-      else:
-        timeStamp = "%sZ" % theTime.replace ( microsecond = 0 ).isoformat()
+      utcOffset = round((datetime.datetime.now()-datetime.datetime.utcnow()).seconds / 60 )
+      timeZone = datetime.timezone(datetime.timedelta(0, utcOffset))
+      theTime.replace(tzinfo=timeZone)
+      timeStamp = theTime.strftime ( timeFormat )
       logFile.write ( ( "[%s] %s\n" ) % ( timeStamp, newEntry ) )
 except:
   print ( "Cannot open %s" % nameOfLogFile )
